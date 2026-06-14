@@ -1,3 +1,5 @@
+console.log("Script Loaded");
+
 emailjs.init("H14oFRtEDJkBGfwQD");
 
 let startTime = null;
@@ -497,6 +499,11 @@ function logout(){
 // Timer Functions
 async function startTimer(){
 
+    if(timerInterval){
+        alert("Task already running");
+        return;
+    }
+
     startTime = new Date();
 
     localStorage.setItem(
@@ -559,13 +566,22 @@ function loadActiveStudents(){
 
                 const data = docSnap.data();
 
+                const start = new Date(data.startTime);
+                const now = new Date();
+
+                const diff = now - start;
+
+                const hours = Math.floor(diff / 3600000);
+                const minutes = Math.floor((diff % 3600000) / 60000);
+
                 table.innerHTML += `
                 <tr>
-                    <td>${data.studentName}</td>
-                    <td>${data.scholarNo}</td>
-                    <td>${data.pcNo}</td>
-                    <td>${data.currentTask || "No Task"}</td>
-                    <td>${data.status}</td>
+                <td>${data.studentName}</td>
+                <td>${data.scholarNo}</td>
+                <td>${data.pcNo}</td>
+                <td>${data.currentTask || "No Task"}</td>
+                <td>${data.status}</td>
+                <td>${hours}h ${minutes}m</td>
                 </tr>
                 `;
             });
@@ -671,18 +687,72 @@ async function submitReport(){
     }
 
     const endTime = new Date();
-    const start = new Date(localStorage.getItem("sessionStartTime"));
 
+    const start =
+    new Date(
+        localStorage.getItem("sessionStartTime")
+    );
 
-    // stop timer
     clearInterval(timerInterval);
 
-    const durationMs = endTime - start;
+    const durationMs =
+    endTime - start;
 
-    const hours = Math.floor(durationMs / 3600000);
-    const minutes = Math.floor((durationMs % 3600000) / 60000);
+    const hours =
+    Math.floor(durationMs / 3600000);
 
-    const duration = `${hours}h ${minutes}m`;
+    const minutes =
+    Math.floor(
+        (durationMs % 3600000) / 60000
+    );
+
+    const duration =
+    `${hours}h ${minutes}m`;
+
+    const sessionId =
+    localStorage.getItem("activeSessionId");
+
+    if(sessionId){
+
+        await deleteDoc(
+            doc(db, "activeSessions", sessionId)
+        );
+
+        localStorage.removeItem("activeSessionId");
+    }
+
+    await addDoc(
+        collection(db,"sessionHistory"),
+        {
+            studentId:
+            localStorage.getItem("studentDocId"),
+
+            taskName: task,
+
+            report: report,
+
+            startTime:
+            start.toISOString(),
+
+            endTime:
+            endTime.toISOString(),
+
+            duration: duration,
+
+            createdAt:
+            serverTimestamp()
+        }
+    );
+
+    document.getElementById("timer").innerText ="00 : 00 : 00";
+
+    document.querySelector("textarea").value = "";
+
+    document.getElementById("currentTask").value = "";
+
+    document.getElementById("reportBox").style.display = "none";
+
+    alert("Report Submitted Successfully");
 }
 
 
@@ -745,10 +815,65 @@ async function sendReportEmail(
 }
 
 
+
+
+// Load Session History for Student
+async function loadHistory(){
+
+    const studentId =
+    localStorage.getItem("studentDocId");
+
+    if(!studentId) return;
+
+    const historyRef =
+    collection(db,"sessionHistory");
+
+    const q =
+    query(
+        historyRef,
+        where("studentId","==",studentId)
+    );
+
+    const snapshot =
+    await getDocs(q);
+
+    const table =
+    document.getElementById("historyTable");
+
+    table.innerHTML = "";
+
+    snapshot.forEach((docSnap)=>{
+
+        const data = docSnap.data();
+
+        table.innerHTML += `
+        <tr>
+            <td>${data.date}</td>
+            <td>${data.startTime}</td>
+            <td>${data.endTime}</td>
+            <td>${data.duration}</td>
+            <td>${data.taskName}</td>
+        </tr>
+        `;
+    });
+
+}
+
+
 // Load Active Students on Faculty Page
 if(
     window.location.pathname
     .includes("faculty.html")
 ){
     loadActiveStudents();
+}
+
+
+
+// Load Session History on History Page
+if(
+window.location.pathname
+.includes("history.html")
+){
+    loadHistory();
 }

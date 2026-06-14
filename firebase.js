@@ -9,7 +9,10 @@ import {
     getDocs,
     updateDoc,
     doc,
-    getDoc
+    getDoc,
+    addDoc,
+    deleteDoc,
+    onSnapshot
 
 }
 
@@ -57,26 +60,13 @@ window.doc = doc;
 
 window.getDoc = getDoc;
 
+window.addDoc = addDoc;
+
+window.deleteDoc = deleteDoc;
+
+window.onSnapshot = onSnapshot;
+
 
 
 console.log("Firebase Connected");
 
-
-
-
-    await addDoc(collection(db, "sessionHistory"), {
-
-        studentId: localStorage.getItem("studentDocId"),
-
-        taskName: task,
-
-        report: report,
-
-        date: endTime.toLocaleDateString(),
-
-        startTime: start.toLocaleTimeString(),
-
-        endTime: endTime.toLocaleTimeString(),
-
-        duration: duration
-    });
