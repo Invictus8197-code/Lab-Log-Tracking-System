@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lab Log Tracker Login</title>
+    <link rel="stylesheet" href="style.css">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+
+</head>
+<body class="login-body">
+
+    
+    <!--Login Page-->
+
+    <div class="circle one"></div>
+    <div class="circle two"></div>
+    <div class="circle three"></div>
+
+    <div class="main-container">
+
+        <!-- Left Section -->
+        <div class="left-section">
+            
+            <div class="left-content active-left" id="studentContent">
+                <div class="character-box">
+                    <div class="character">🤖</div>
+                </div>
+                <h1>Welcome Students!</h1>
+                <p>Start your lab session, track your work, and submit reports easily.</p>
+
+                <div class="tips">
+                    <div class="tip-card">💡 Enter your Scholar Number correctly</div>
+                    <div class="tip-card">🖥️ Make sure your PC Number matches the system</div>
+                    <div class="tip-card">⏱️ Your session timer starts automatically</div>
+                </div>
+
+            </div>
+
+            <div class="left-content" id="facultyContent">
+                <div class="character-box">
+                   <div class="character">👨‍🏫</div>
+                </div>
+                <h1>Faculty Access</h1>
+                <p>Monitor active sessions, review reports, and manage laboratory activity.</p>
+
+                <div class="tips">
+                    <div class="tip-card">📊 View live student activity</div>
+                    <div class="tip-card">📝 Review submitted reports</div>
+                    <div class="tip-card">🔒 Secure laboratory monitoring access</div>
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- Right Section -->
+        <div class="right-section">
+
+            <!-- Student Login Form -->
+            <div class="login-box active-form" id="studentForm">
+                <h2>Student Login</h2>
+
+                <div class="input-box">
+                    <label>Scholar Number</label>
+                    <input type="text" id="studentScholar" placeholder="Enter Scholar Number">
+                </div>
+
+                <div class="input-box">
+                    <label>PC Number</label>
+                    <input type="text" id="studentPC" placeholder="Enter PC Number">
+                </div>
+
+                <div class="input-box">
+                    <label>Password</label>
+                    <div class="password-box">
+                        <input type="password" id="studentPassword" placeholder="Enter Password">
+                        <button type="button" class="password-toggle" onclick="togglePassword('studentPassword', this)"><i class="bi bi-eye"></i></button>
+                    </div>
+
+                </div>
+
+                <div id="studentError" class="error-message"></div>
+
+                <button id="studentLoginBtn" onclick="studentLogin()" class="login-btn">Login</button>
+
+                <div class="switch-link">
+                    <span onclick="showFacultyLogin()">Admin Login</span>
+                </div>
+
+            </div>
+
+
+            <!-- Faculty Login Form -->
+            <div class="login-box" id="facultyForm">
+                <h2>Faculty Login</h2>
+
+                <div class="input-box">
+                    <label>Username</label>
+                    <input type="text" id="facultyUsername" placeholder="Enter Username">
+                </div>
+
+                <div class="input-box">
+                    <label>Password</label>
+                    <div class="password-box">
+                        <input type="password" id="facultyPassword" placeholder="Enter Password">
+                        <button type="button" class="password-toggle" onclick="togglePassword('facultyPassword', this)"><i class="bi bi-eye"></i></button>
+                    </div>
+
+                </div>
+                
+                <div id="facultyError" class="error-message"></div>
+
+                <button id="facultyLoginBtn" onclick="facultyLogin()" class="login-btn">Login</button>
+
+                <div class="switch-link">
+                    <span onclick="showStudentLogin()">Student Login</span>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    
+    <!-- Student Password Popup -->
+    <div class="popup" id="passwordPopup">
+
+        <div class="popup-box">
+            <h2>Create New Password</h2>
+            <p>Set your personal password for future logins</p>
+            <div class="password-box">
+                <input type="password" id="newPassword" placeholder="Create New Password">
+                <button type="button" class="password-toggle" onclick="togglePassword('newPassword', this)"><i class="bi bi-eye"></i></button>
+            </div>
+
+            <div class="password-box">
+                <input type="password" id="confirmPassword" placeholder="Confirm Password">
+                <button type="button" class="password-toggle" onclick="togglePassword('confirmPassword', this)"><i class="bi bi-eye"></i></button>
+            </div>
+            <button onclick="saveNewPassword()">Save Password</button>
+        </div>
+
+    </div>
+
+
+    <!-- Faculty Credentials Popup -->
+    <div class="popup" id="facultyPopup">
+
+        <div class="popup-box">
+            <h2>Create Faculty Credentials</h2>
+            <p>Create your personal username and password</p>
+            <input type="text" id="newFacultyUsername" placeholder="Create Username">
+            <div class="password-box">
+                <input type="password" id="newFacultyPassword" placeholder="Create Password">
+                <button type="button" class="password-toggle" onclick="togglePassword('newFacultyPassword', this)"><i class="bi bi-eye"></i></button>
+            </div>
+
+            <div class="password-box">
+                <input type="password" id="confirmFacultyPassword" placeholder="Confirm Password">
+                <button type="button" class="password-toggle" onclick="togglePassword('confirmFacultyPassword', this)"><i class="bi bi-eye"></i></button>
+            </div>
+            <button onclick="saveFacultyCredentials()">Save Credentials</button>
+        </div>
+
+    </div>
+
+
+ <script type="module" src="firebase.js"></script>
+ <script src="script.js"></script>
+ <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+</body>
+</html>

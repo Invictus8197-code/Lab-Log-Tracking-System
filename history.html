@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="dashboard">
+
+        <!-- Sidebar -->
+        <aside class="sidebar">
+
+            <div>
+                <div class="logo">
+                    <h1>LLTS</h1>
+                    <p>Student Panel</p>
+                </div>
+
+                <nav>
+                    <a href="student.html" class="active">Dashboard</a>
+                    <a href="history.html">History</a>
+                </nav>
+
+            </div>  
+
+            <button class="logout-btn" onclick="logout()">Logout</button>  
+
+        </aside>
+        
+    <main class="main-content">
+
+            <!-- Header -->
+            <div class="top-bar">
+
+                <div>
+                    <h2>Session History</h2>
+                    <p>View all previous laboratory sessions</p>
+                </div>
+
+            </div>
+
+
+    <div class="history-section">
+
+        <table>
+
+            <thead>
+
+                <tr>
+
+                    <th>Date</th>
+
+                    <th>Start Time</th>
+
+                    <th>End Time</th>
+
+                    <th>Duration</th>
+
+                    <th>Task</th>
+
+                </tr>
+
+            </thead>
+
+            <tbody id="historyTable">
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</main>
+</body>
+</html>
